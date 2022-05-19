@@ -3,46 +3,45 @@
 
 #include <QWidget>
 #include <QVector>
-#include <QtSerialPort/QSerialPort>
+#include <QSerialPort>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class Widget; }
-QT_END_NAMESPACE
+namespace Ui {
+class Widget;
+}
 
 class Widget : public QWidget
 {
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = nullptr);
+    explicit Widget(QWidget *parent = 0);
     ~Widget();
-    void PlotConfig();
-    void readserial();
-    void Send(int cmd,uint16_t Info);
-    void DoCMD(int cmd, double Data);
-    void Draw();
+
 private slots:
-    void on_toolButton_clicked();
+    void makeplot();
+    void readSerial();
+    void processSerial(double data,int Cmd);
+    void on_pushButton_2_clicked();
+    void Send(uint8_t cmd,uint32_t Info);
+    void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
 
-    void on_toolButton_2_clicked();
-
-    void on_horizontalSlider_valueChanged(int value);
-
-    void on_pushButton_clicked();
+    void on_pushButton_5_clicked();
 
 private:
     Ui::Widget *ui;
-
-    QSerialPort *ttl;
+    void setupPlot();
     QVector<double> RpmGraph;
     QVector<double> CurrentGraph;
     QVector<double> x;
+    QVector<double> y;
+    QSerialPort *ttl;
     static const quint16 ttl_vendor_id = 9476;
     static const quint16 ttl_product_id = 768;
     QByteArray serialData;
     QString serialBuffer;
     QString parsed_data;
+
 };
+
 #endif // WIDGET_H
-
-
